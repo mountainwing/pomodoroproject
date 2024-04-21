@@ -8,7 +8,10 @@ let pause = document.getElementById("btn-pause");
 let time = document.getElementById("time");
 let decreaseBtn = document.getElementById('decreaseBtn');
 let increaseBtn = document.getElementById('increaseBtn');
-let settingBtn =document.getElementById('settingBtn');
+let bookBtn = document.getElementById('bookBtn');
+let totalElapsedTime = 0;     // Variable to store total elapsed time (in milliseconds)
+let logResult = document.getElementById('logrecord-container'); //Showing the analysis
+let calculationPerformed = false;
 let alertSound = document.getElementById('alert-sound'); // Select the audio element
 let messageElement = document.getElementById('endMessage-container'); // Assuming you have a message element (optional)
 let set;
@@ -89,36 +92,40 @@ longBreakButton.addEventListener("click", () => {
   time.textContent = `${minCount + 1}:00`;
 });
 
+
 //preakFuncitonality
-pause.addEventListener(
-  "click",
-  (pauseTimer = () => {
-    paused = true;
-    clearInterval(set);
-    startBtn.classList.remove("hide");
-    increaseBtn.classList.remove("hide");
-    decreaseBtn.classList.remove("hide");
-    settingBtn.classList.remove("hide");
-    pause.classList.remove("show");
-    reset.classList.remove("show");
+pause.addEventListener("click", (pauseTimer = () => {
+
+  paused = true;
+  clearInterval(set);
+  
+  pauseTime = resumeTime();
+
+  startBtn.classList.remove("hide");
+  increaseBtn.classList.remove("hide");
+  decreaseBtn.classList.remove("hide");
+  pause.classList.remove("show");
+  reset.classList.remove("show");
   })
 );
 
 //startFunctionality MAIN FUNCTION
 startBtn.addEventListener("click", () => {
 
-  startSoundeffect.play()
+  if(calculationPerformed){
+    calculationPerformed = false;
+  }
+  startSoundeffect.play();
+  currentTime = startTimer();
 
   reset.classList.add("show");
   pause.classList.add("show");
   increaseBtn.classList.add("hide");
   decreaseBtn.classList.add("hide");
-  settingBtn.classList.add("hide");
   startBtn.classList.add("hide");
   startBtn.classList.remove("show");
   increaseBtn.classList.remove("show");
   decreaseBtn.classList.remove("show");
-  settingBtn.classList.remove("show");
   messageElement.classList.add("hide");
   if (paused) {
     paused = false;
@@ -140,6 +147,8 @@ startBtn.addEventListener("click", () => {
     }, 1000);
   }
 });
+
+
 
 //for clicking functionality
 increaseBtn.addEventListener("click", function() {
@@ -216,3 +225,50 @@ decreaseBtn.addEventListener("mousedown", function() {
     clearInterval(decreaseInterval);
   });
 });
+
+function resumeTime() {
+
+  const pauseTime = performance.now();
+  console.log(`Pause Time: ${pauseTime}`);
+
+  return pauseTime;
+}
+function startTimer() {
+
+  currentTime = performance.now();
+  console.log(`Start Time: ${currentTime}`);
+  return currentTime;
+}
+
+function intervalSum() {
+  const intervalTime = (pauseTime - currentTime) / 60000;
+  console.log(`Interval time: ${intervalTime}`);
+  
+  totalElapsedTime += intervalTime;
+  console.log(`Total study time: ${totalElapsedTime}`);
+  
+  return totalElapsedTime;
+}
+
+bookBtn.addEventListener('click', function() {
+  logResult.classList.toggle("hide");
+  
+  if(!calculationPerformed) {
+    intervalSum();
+    calculationPerformed = true;
+  }
+  
+  // To display results in html div
+  const studyAnalysis = document.getElementById("logResult");
+  //return results to html
+  studyAnalysis.innerHTML = `
+  <h2>Study Analysis</h2>
+  <h3>Total study time: ${totalElapsedTime.toFixed(3)} minutes.</h3>
+  <h3>Total break time: ${totalElapsedTime.toFixed(3)} minutes.</h3>
+  `
+})
+
+
+
+
+
