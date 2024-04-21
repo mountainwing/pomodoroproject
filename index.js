@@ -119,6 +119,7 @@ startBtn.addEventListener("click", () => {
   increaseBtn.classList.remove("show");
   decreaseBtn.classList.remove("show");
   settingBtn.classList.remove("show");
+  messageElement.classList.add("hide");
   if (paused) {
     paused = false;
     time.textContent = `${appendZero(minCount)}:${appendZero(count)}`;
