@@ -136,11 +136,13 @@ startBtn.addEventListener("click", () => {
   pause.classList.add("show");
   increaseBtn.classList.add("hide");
   decreaseBtn.classList.add("hide");
+  bookBtn.classList.add("hide");
   startBtn.classList.add("hide");
   startBtn.classList.remove("show");
   increaseBtn.classList.remove("show");
   decreaseBtn.classList.remove("show");
-  bookBtn.classList.add("hide");
+  bookBtn.classList.remove("show");
+  
   messageElement.classList.add("hide");
   if (paused) {
     paused = false;
