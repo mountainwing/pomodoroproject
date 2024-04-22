@@ -108,6 +108,7 @@ pause.addEventListener("click", (pauseTimer = () => {
   paused = true;
   clearInterval(set);
   startBtn.classList.remove("hide");
+  bookBtn.classList.remove("hide");
   increaseBtn.classList.remove("hide");
   decreaseBtn.classList.remove("hide");
   pause.classList.remove("show");
@@ -139,6 +140,7 @@ startBtn.addEventListener("click", () => {
   startBtn.classList.remove("show");
   increaseBtn.classList.remove("show");
   decreaseBtn.classList.remove("show");
+  bookBtn.classList.add("hide");
   messageElement.classList.add("hide");
   if (paused) {
     paused = false;
