@@ -9,11 +9,12 @@ let time = document.getElementById("time");
 let decreaseBtn = document.getElementById('decreaseBtn');
 let increaseBtn = document.getElementById('increaseBtn');
 let bookBtn = document.getElementById('bookBtn');
-let totalElapsedTime = 0;     // Variable to store total elapsed time (in milliseconds)
+let totalElapsedTimeStudy = 0;     // Variable to store total elapsed time (in milliseconds)
 let logResult = document.getElementById('logrecord-container'); //Showing the analysis
-let calculationPerformed = false;
+let calculationPerformedStudy = false;
 let alertSound = document.getElementById('alert-sound'); // Select the audio element
 let messageElement = document.getElementById('endMessage-container'); // Assuming you have a message element (optional)
+let studymode = true;
 let set;
 let active = "focus";
 let count = 59;
@@ -22,8 +23,9 @@ let minCount = 24;
 time.textContent = `${minCount + 1}:00`;
 
 // Audio files
-let startSoundeffect = new Audio("gamestart.mp3");
-let endSoundeffect = new Audio("winfantasia.mp3");
+let startSoundeffect = new Audio("file2.mp3");
+let endSoundeffect = new Audio("file1.mp3");
+let takebreakSoundEffect = new Audio("limbehbreak.mp3");
 
 const appendZero = (value) => {
   value = value < 10 ? `0${value}` : value;
@@ -57,12 +59,13 @@ const removeFocus = () => {
   });
 };
 
-
 //focusFunctionality
 focusButton.addEventListener("click", () => {
+  studymode = true;
   removeFocus();
   focusButton.classList.add("btn-focus");
   pauseTimer();
+  console.log("Focus mode");
   minCount = 24;
   count = 59;
   time.textContent = `${minCount + 1}:00`;
@@ -72,7 +75,9 @@ focusButton.addEventListener("click", () => {
 //shortbreakFunctionality
 shortBreakButton.addEventListener("click", () => {
   active = "short";
+  studymode = false;
   removeFocus();
+  console.log("Break mode");
   shortBreakButton.classList.add("btn-focus");
   pauseTimer();
   minCount = 4;
@@ -85,6 +90,8 @@ shortBreakButton.addEventListener("click", () => {
 longBreakButton.addEventListener("click", () => {
   active = "long";
   removeFocus();
+  studymode = false;
+  console.log("Break mode");
   longBreakButton.classList.add("btn-focus");
   pauseTimer();
   minCount = 14;
@@ -93,31 +100,36 @@ longBreakButton.addEventListener("click", () => {
 });
 
 
-//preakFuncitonality
+//pauseFuncitonality
 pause.addEventListener("click", (pauseTimer = () => {
 
+  pauseTimeStudy = resumeTimeStudy();
   paused = true;
   clearInterval(set);
-  
-  pauseTime = resumeTime();
-
   startBtn.classList.remove("hide");
   increaseBtn.classList.remove("hide");
   decreaseBtn.classList.remove("hide");
   pause.classList.remove("show");
   reset.classList.remove("show");
-  })
-);
+}
+));
 
 //startFunctionality MAIN FUNCTION
 startBtn.addEventListener("click", () => {
 
-  if(calculationPerformed){
-    calculationPerformed = false;
+//on focus mode
+  if(calculationPerformedStudy){
+    calculationPerformedStudy = false;
   }
-  startSoundeffect.play();
-  currentTime = startTimer();
+  currentTimeStudy = startTimerStudy();
+  if (studymode) {
+    startSoundeffect.play();
+  }
 
+  if (!studymode) {
+    takebreakSoundEffect.play();
+  }
+  
   reset.classList.add("show");
   pause.classList.add("show");
   increaseBtn.classList.add("hide");
@@ -146,8 +158,9 @@ startBtn.addEventListener("click", () => {
       }
     }, 1000);
   }
-});
-
+}
+  
+);
 
 
 //for clicking functionality
@@ -226,49 +239,69 @@ decreaseBtn.addEventListener("mousedown", function() {
   });
 });
 
-function resumeTime() {
+function resumeTimeStudy() {
 
-  const pauseTime = performance.now();
-  console.log(`Pause Time: ${pauseTime}`);
+  const pauseTimeStudy = performance.now();
+  console.log(`Pause Time Study: ${pauseTimeStudy}`);
 
-  return pauseTime;
-}
-function startTimer() {
-
-  currentTime = performance.now();
-  console.log(`Start Time: ${currentTime}`);
-  return currentTime;
+  return pauseTimeStudy;
 }
 
-function intervalSum() {
-  const intervalTime = (pauseTime - currentTime) / 60000;
-  console.log(`Interval time: ${intervalTime}`);
+function startTimerStudy() {
+
+  const currentTimeStudy = performance.now();
+  console.log(`Start Time Study: ${currentTimeStudy}`);
+  return currentTimeStudy;
+}
+
+function intervalSumStudy() {
+  if (studymode) {
+    const intervalTimeStudy = (pauseTimeStudy - currentTimeStudy) / 60000;
+    console.log(`Interval time for study: ${intervalTimeStudy}`);
   
-  totalElapsedTime += intervalTime;
-  console.log(`Total study time: ${totalElapsedTime}`);
+    totalElapsedTimeStudy += intervalTimeStudy;
+    console.log(`Total study time: ${totalElapsedTimeStudy}`);
   
-  return totalElapsedTime;
+  return totalElapsedTimeStudy;
+  }
 }
 
 bookBtn.addEventListener('click', function() {
   logResult.classList.toggle("hide");
   
-  if(!calculationPerformed) {
-    intervalSum();
-    calculationPerformed = true;
+  if(!calculationPerformedStudy) {
+    intervalSumStudy();
+    calculationPerformedStudy = true; //toggle back
   }
+
   
   // To display results in html div
   const studyAnalysis = document.getElementById("logResult");
   //return results to html
   studyAnalysis.innerHTML = `
   <h2>Study Analysis</h2>
-  <h3>Total study time: ${totalElapsedTime.toFixed(3)} minutes.</h3>
-  <h3>Total break time: ${totalElapsedTime.toFixed(3)} minutes.</h3>
+  <h3>Total study time: ${Math.round(totalElapsedTimeStudy)} minutes.</h3>
+  <h3>加油哦 	＼(≧▽≦)／</h3>
   `
 })
 
+let hiddenTimeStamp = null;
+function handleVisibilityChange() {
+  if(document.visibilityState === "hidden") {
+    //Tab is hidden, record the current timestamp
+    hiddenTimeStamp = performance.now();
+  } else {
+    //tab become visible again
+    if (hiddenTimeStamp !== null) {
+      //calculate the elapsed time since tab was hidden
+      const elapsed = performance.now() - hiddenTimeStamp;
+      //reset hiddentimestamp
+      hiddenTimeStamp = null;
+    }
+  }
+}
 
+document.addEventListener("visibilitychange",handleVisibilityChange);
 
 
 
