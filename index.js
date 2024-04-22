@@ -11,6 +11,7 @@ let increaseBtn = document.getElementById('increaseBtn');
 let bookBtn = document.getElementById('bookBtn');
 let totalElapsedTimeStudy = 0;     // Variable to store total elapsed time (in milliseconds)
 let logResult = document.getElementById('logrecord-container'); //Showing the analysis
+let tabtimer = document.getElementById('tabtimer');
 let calculationPerformedStudy = false;
 let alertSound = document.getElementById('alert-sound'); // Select the audio element
 let messageElement = document.getElementById('endMessage-container'); // Assuming you have a message element (optional)
@@ -103,7 +104,7 @@ longBreakButton.addEventListener("click", () => {
 //pauseFuncitonality
 pause.addEventListener("click", (pauseTimer = () => {
 
-  pauseTimeStudy = resumeTimeStudy();
+  pauseTimeValue = resumeTimeStudy();
   paused = true;
   clearInterval(set);
   startBtn.classList.remove("hide");
@@ -121,15 +122,15 @@ startBtn.addEventListener("click", () => {
   if(calculationPerformedStudy){
     calculationPerformedStudy = false;
   }
-  currentTimeStudy = startTimerStudy();
   if (studymode) {
     startSoundeffect.play();
   }
-
-  if (!studymode) {
+  else if (!studymode) {
     takebreakSoundEffect.play();
   }
-  
+
+  currentTimeValue = startTimerStudy();
+
   reset.classList.add("show");
   pause.classList.add("show");
   increaseBtn.classList.add("hide");
@@ -156,12 +157,13 @@ startBtn.addEventListener("click", () => {
           messageElement.classList.remove("hide");
         }
       }
+      // titlebar live clock
+      tabtimer.innerHTML = `${minCount.toString().padStart(2, '0')}:${count.toString().padStart(2, '0')} || studywithwing`;
     }, 1000);
   }
 }
   
 );
-
 
 //for clicking functionality
 increaseBtn.addEventListener("click", function() {
@@ -256,7 +258,7 @@ function startTimerStudy() {
 
 function intervalSumStudy() {
   if (studymode) {
-    const intervalTimeStudy = (pauseTimeStudy - currentTimeStudy) / 60000;
+    const intervalTimeStudy = (pauseTimeValue - currentTimeValue) / 60000;
     console.log(`Interval time for study: ${intervalTimeStudy}`);
   
     totalElapsedTimeStudy += intervalTimeStudy;
@@ -285,23 +287,19 @@ bookBtn.addEventListener('click', function() {
   `
 })
 
-let hiddenTimeStamp = null;
-function handleVisibilityChange() {
-  if(document.visibilityState === "hidden") {
-    //Tab is hidden, record the current timestamp
-    hiddenTimeStamp = performance.now();
-  } else {
-    //tab become visible again
-    if (hiddenTimeStamp !== null) {
-      //calculate the elapsed time since tab was hidden
-      const elapsed = performance.now() - hiddenTimeStamp;
-      //reset hiddentimestamp
-      hiddenTimeStamp = null;
-    }
-  }
+// JavaScript code to keep the tab active
+function keepTabActive() {
+  // Focus on the window whenever it loses focus
+  window.addEventListener('blur', function() {
+      window.focus();
+  });
+
+  // Periodically focus on the window to keep it active
+  setInterval(function() {
+      window.focus();
+  }, 5000); // Adjust the interval as needed
 }
 
-document.addEventListener("visibilitychange",handleVisibilityChange);
-
-
+// Call the function to keep the tab active
+keepTabActive();
 

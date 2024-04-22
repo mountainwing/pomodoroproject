@@ -12,7 +12,7 @@ body {
   background-size: cover;
 }
 .container {
-  background-color: #1b1b1b;
+  background-color: rgba(39, 38, 38, 0.5);
   width: min(90%, 500px);
   position: absolute;
   transform: translate(-50%, -50%);
@@ -23,7 +23,7 @@ body {
 }
 
 #endMessage-container{
-  background-color: #1b1b1b;
+  background-color: rgba(39, 38, 38, 0.5);
   width: min(90%, 500px);
   position: absolute;
   transform: translate(-50%,-50%);
@@ -34,7 +34,7 @@ body {
 }
 
 #logrecord-container{
-  background-color: #1b1b1b;
+  background-color: rgba(39, 38, 38, 0.5);
   width: min(90%, 500px);
   position: absolute;
   transform: translate(-50%, -50%);
