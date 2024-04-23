@@ -21,7 +21,10 @@ let active = "focus";
 let count = 59;
 let paused = true;
 let minCount = 24;
-time.textContent = `${minCount + 1}:00`;
+time.textContent = `${minCount + 1}:00`; // making 24:59 +1 so display will be 25:00
+const popup = document.getElementById('popup');
+const openPopupBtn = document.getElementById('openPopup');
+const studyTimeSelect = document.getElementById('studyTimeSelect');
 
 // Audio files
 let startSoundeffect = new Audio("limbehvoice.mp3");
@@ -119,6 +122,7 @@ pause.addEventListener("click", (pauseTimer = () => {
   // decreaseBtn.classList.remove("hide");
   pause.classList.remove("show");
   reset.classList.remove("hide");
+  openPopupBtn.classList.remove("hide");
 }
 ));
 
@@ -138,6 +142,9 @@ startBtn.addEventListener("click", () => {
 
   currentTimeValue = startTimerStudy();
 
+  openPopupBtn.classList.remove("show");
+  openPopupBtn.classList.add("hide");
+  reset.classList.remove("show");
   reset.classList.add("hide");
   pause.classList.add("show");
   bookBtn.classList.add("hide");
@@ -146,8 +153,8 @@ startBtn.addEventListener("click", () => {
   // increaseBtn.classList.remove("show");
   // decreaseBtn.classList.remove("show");
   bookBtn.classList.remove("show");
-  
   messageElement.classList.add("hide");
+
   if (paused) {
     paused = false;
     time.textContent = `${appendZero(minCount)}:${appendZero(count)}`;
@@ -155,7 +162,7 @@ startBtn.addEventListener("click", () => {
       count--;
       time.textContent = `${appendZero(minCount)}:${appendZero(count)}`;
       if (count == 0) {
-        if (minCount != 0) {
+        if (minCount != 0 ) {
           minCount--;
           count = 60;
         }
@@ -288,6 +295,27 @@ bookBtn.addEventListener('click', function() {
   <h3>加油哦 	＼(≧▽≦)／</h3>
   `
 })
+
+// Event listener to toggle the popup and confirm the study time
+openPopupBtn.addEventListener('click', () => {
+
+  // Get the study time value from the input field
+  const studyTime = parseInt(studyTimeSelect.value, 10);
+  minCount = studyTime - 1;
+  count = 59;
+  console.log(minCount);
+  
+  // Toggle the display property of the popup
+  if (popup.style.display === 'block') {
+    time.textContent = `${minCount + 1}:00`; //change dispay timer 
+    popup.style.display = 'none'; // Hide the popup
+  } else {
+    popup.style.display = 'block'; // Show the popup
+  }
+  
+  
+});
+
 
 // JavaScript code to keep the tab active
 function keepTabActive() {

@@ -23,6 +23,17 @@
       <p id="message">BREAK TIME LIAO SOHAI</p>
     </div>
     
+    <!-- Hidden popup dialog -->
+    <div id="popup" class="popup">
+      <select id="studyTimeSelect">
+        <option value="5">5 minutes</option>
+        <option value="10">10 minutes</option>
+        <option value="15">15 minutes</option>
+        <option value="25">25 minutes</option>
+        <option value="35">35 minutes</option>
+      </select>
+    </div>
+
     <!-- focus options -->
     <div class="container">
       <div class="section-container">
@@ -36,10 +47,13 @@
         <span id="time"></span>
         <div class="btn-container">
           <!-- <button id="increaseBtn" class="show">+</button> -->
+          <button id="openPopup" class="show">
+            <i style="font-size:24px" class="fa">&#xf017;</i>
+          </button>
           <button id="btn-start" class="show">Start</button>
           <!-- <button id="decreaseBtn" class="show">-</button> -->
           <button id="btn-pause" class="hide">Pause</button>
-          <button id="btn-reset" class="hide">
+          <button id="btn-reset" class="show">
             <i class="fa-solid fa-rotate-right"></i>
           </button>
           <button id="bookBtn" class="show">

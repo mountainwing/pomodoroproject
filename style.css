@@ -96,16 +96,23 @@ button {
 }
 
 #btn-start,
-#btn-pause,
-#increaseBtn,
-#decreaseBtn {
+#btn-pause {
   padding: 1em 2em;
   border-radius: 0.5em;
   cursor: pointer;
   background-color: #ffffff;
 }
 
+#openPopup,
 #bookBtn {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: #ffffff;
+  font-size: 2em;
+}
+
+#openPopup {
   background-color: transparent;
   border: none;
   outline: none;
@@ -125,4 +132,36 @@ button {
 }
 .show {
   display: block;
+}
+
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 20px;
+  border: 1px solid #ccc;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: none; /* Hide initially */
+  z-index: 9999;
+}
+
+.popup input[type="text"] {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.popup button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.popup button:hover {
+  background-color: #0056b3;
 }
