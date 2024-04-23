@@ -323,11 +323,6 @@ function keepTabActive() {
   window.addEventListener('blur', function() {
       window.focus();
   });
-
-  // Periodically focus on the window to keep it active
-  setInterval(function() {
-      window.focus();
-  }, 500); // Adjust the interval as needed
 }
 
 // Call the function to keep the tab active
