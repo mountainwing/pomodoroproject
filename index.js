@@ -24,7 +24,7 @@ let minCount = 24;
 time.textContent = `${minCount + 1}:00`;
 
 // Audio files
-let startSoundeffect = new Audio("file2.mp3");
+let startSoundeffect = new Audio("limbehvoice.mp3");
 let endSoundeffect = new Audio("file1.mp3");
 let takebreakSoundEffect = new Audio("limbehbreak.mp3");
 
@@ -84,6 +84,7 @@ shortBreakButton.addEventListener("click", () => {
   minCount = 4;
   count = 59;
   time.textContent = `${appendZero(minCount + 1)}:00`;
+  logResult.classList.toggle("hide");
 });
 
 
@@ -98,6 +99,7 @@ longBreakButton.addEventListener("click", () => {
   minCount = 14;
   count = 59;
   time.textContent = `${minCount + 1}:00`;
+  logResult.classList.toggle("hide");
 });
 
 
@@ -107,12 +109,16 @@ pause.addEventListener("click", (pauseTimer = () => {
   pauseTimeValue = resumeTimeStudy();
   paused = true;
   clearInterval(set);
+  if(!calculationPerformedStudy) {
+    intervalSumStudy();
+    calculationPerformedStudy = true; //toggle back
+  }
   startBtn.classList.remove("hide");
   bookBtn.classList.remove("hide");
-  increaseBtn.classList.remove("hide");
-  decreaseBtn.classList.remove("hide");
+  // increaseBtn.classList.remove("hide");
+  // decreaseBtn.classList.remove("hide");
   pause.classList.remove("show");
-  reset.classList.remove("show");
+  reset.classList.remove("hide");
 }
 ));
 
@@ -132,15 +138,13 @@ startBtn.addEventListener("click", () => {
 
   currentTimeValue = startTimerStudy();
 
-  reset.classList.add("show");
+  reset.classList.add("hide");
   pause.classList.add("show");
-  increaseBtn.classList.add("hide");
-  decreaseBtn.classList.add("hide");
   bookBtn.classList.add("hide");
   startBtn.classList.add("hide");
   startBtn.classList.remove("show");
-  increaseBtn.classList.remove("show");
-  decreaseBtn.classList.remove("show");
+  // increaseBtn.classList.remove("show");
+  // decreaseBtn.classList.remove("show");
   bookBtn.classList.remove("show");
   
   messageElement.classList.add("hide");
@@ -169,81 +173,81 @@ startBtn.addEventListener("click", () => {
   
 );
 
-//for clicking functionality
-increaseBtn.addEventListener("click", function() {
-  // Single click: Increment count once
-  count = Math.min(count + 1, 59);
-  // Check and update minCount if needed
-  if (count === 59) {
-    count = 0;
-    minCount++;
-  }
-  time.textContent = `${minCount}:${count.toString().padStart(2, '0')}`;
-});
+// //for clicking functionality
+// increaseBtn.addEventListener("click", function() {
+//   // Single click: Increment count once
+//   count = Math.min(count + 1, 59);
+//   // Check and update minCount if needed
+//   if (count === 59) {
+//     count = 0;
+//     minCount++;
+//   }
+//   time.textContent = `${minCount}:${count.toString().padStart(2, '0')}`;
+// });
 
-//for click-and-hold
-let isHolding = false; // Flag to track if the button is being held
+// //for click-and-hold
+// let isHolding = false; // Flag to track if the button is being held
 
-increaseBtn.addEventListener("mousedown", function() {
-  isHolding = true; // Set flag to true when mousedown occurs
+// increaseBtn.addEventListener("mousedown", function() {
+//   isHolding = true; // Set flag to true when mousedown occurs
 
-  const increaseInterval = setInterval(() => {
-    // Increment count and limit it to a maximum of 59
-    count = Math.min(count + 1, 59);
+//   const increaseInterval = setInterval(() => {
+//     // Increment count and limit it to a maximum of 59
+//     count = Math.min(count + 1, 59);
 
-    // Check if count reached 59 (reset count and increment minCount)
-    if (count === 59) {
-      count = 0;
-      minCount++;
-    }
+//     // Check if count reached 59 (reset count and increment minCount)
+//     if (count === 59) {
+//       count = 0;
+//       minCount++;
+//     }
 
-    time.textContent = `${minCount}:${count.toString().padStart(2, '0')}`;
-  }, 100); // Adjust interval as needed (lower value for faster increase)
+//     time.textContent = `${minCount}:${count.toString().padStart(2, '0')}`;
+//   }, 100); // Adjust interval as needed (lower value for faster increase)
 
-  // Clear the interval when the button is released (mouseup)
-  increaseBtn.addEventListener("mouseup", function() {
-    isHolding = false;
-    clearInterval(increaseInterval);
-  });
-});
+//   // Clear the interval when the button is released (mouseup)
+//   increaseBtn.addEventListener("mouseup", function() {
+//     isHolding = false;
+//     clearInterval(increaseInterval);
+//   });
+// });
 
-//decrease click functionality
-decreaseBtn.onclick = function(){
-  // Increment count but limit it to a maximum of 59
-  count = Math.max(count -1, 0);
-  // Check if count reached 0 (reset count and increment minCount)
-  if (count === 0) {
-    count = 59;
-    minCount--;
-  }
-  time.textContent = `${minCount}:${count.toString().padStart(2,'0')}`;
-}
+// //decrease click functionality
+// decreaseBtn.onclick = function(){
+//   // Increment count but limit it to a maximum of 59
+//   count = Math.max(count -1, 0);
+//   // Check if count reached 0 (reset count and increment minCount)
+//   if (count === 0) {
+//     count = 59;
+//     minCount--;
+//   }
+//   time.textContent = `${minCount}:${count.toString().padStart(2,'0')}`;
+// }
 
-//decrease click and hold function
-let isHoldingDecrease = false; // Flag to track hold state for decrease button
+// //decrease click and hold function
+// let isHoldingDecrease = false; // Flag to track hold state for decrease button
 
-decreaseBtn.addEventListener("mousedown", function() {
-  isHoldingDecrease = true; // Set flag to true when mousedown occurs
+// decreaseBtn.addEventListener("mousedown", function() {
+//   isHoldingDecrease = true; // Set flag to true when mousedown occurs
 
-  const decreaseInterval = setInterval(() => {
-    // Decrement count and limit it to a minimum of 0
-    count = Math.max(count - 1, 0);
+//   const decreaseInterval = setInterval(() => {
+//     // Decrement count and limit it to a minimum of 0
+//     count = Math.max(count - 1, 0);
 
-    // Check if count reached 0 (reset count and decrement minCount)
-    if (count === 0) {
-      count = 59;
-      minCount--;
-    }
+//     // Check if count reached 0 (reset count and decrement minCount)
+//     if (count === 0) {
+//       count = 59;
+//       minCount--;
+//     }
 
-    time.textContent = `${minCount}:${count.toString().padStart(2, '0')}`;
-  }, 100); // Adjust interval as needed (lower value for faster decrease)
+//     time.textContent = `${minCount}:${count.toString().padStart(2, '0')}`;
+//   }, 100); // Adjust interval as needed (lower value for faster decrease)
 
-  // Clear the interval when the button is released (mouseup)
-  decreaseBtn.addEventListener("mouseup", function() {
-    isHoldingDecrease = false;
-    clearInterval(decreaseInterval);
-  });
-});
+//   // Clear the interval when the button is released (mouseup)
+//   decreaseBtn.addEventListener("mouseup", function() {
+//     isHoldingDecrease = false;
+//     clearInterval(decreaseInterval);
+//   });
+// });
 
 function resumeTimeStudy() {
 
@@ -275,12 +279,6 @@ function intervalSumStudy() {
 bookBtn.addEventListener('click', function() {
   logResult.classList.toggle("hide");
   
-  if(!calculationPerformedStudy) {
-    intervalSumStudy();
-    calculationPerformedStudy = true; //toggle back
-  }
-
-  
   // To display results in html div
   const studyAnalysis = document.getElementById("logResult");
   //return results to html
@@ -301,7 +299,7 @@ function keepTabActive() {
   // Periodically focus on the window to keep it active
   setInterval(function() {
       window.focus();
-  }, 5000); // Adjust the interval as needed
+  }, 500); // Adjust the interval as needed
 }
 
 // Call the function to keep the tab active
