@@ -27,7 +27,7 @@ const openPopupBtn = document.getElementById('openPopup');
 const studyTimeSelect = document.getElementById('studyTimeSelect');
 
 // Audio files
-let startSoundeffect = new Audio("limbehvoice.mp3");
+let startSoundeffect = new Audio("pedro_pedro_pe.mp3");
 let endSoundeffect = new Audio("file1.mp3");
 let takebreakSoundEffect = new Audio("limbehbreak.mp3");
 
